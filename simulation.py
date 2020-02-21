@@ -11,11 +11,7 @@ Created on Wed Feb 12 2020
 import numpy as np
 import numpy.linalg as la
 import matplotlib.pyplot as plt
-import time
 import scipy.integrate as scint
-import scipy.optimize as scopt
-import scipy.sparse as sp
-import scipy.interpolate as sinterpol
 import pandas as pd
 
 # Global definition of the graph laplacian
@@ -70,11 +66,11 @@ E = np.array([
   [0,  0,  0,  0,  0,  0,  0, -1,  0,  0,  0,  0,  0,  0,  0,  1],
   [0,  0,  0,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  0,  0, -1]])
 
-layers = [[0], [1,2,4,8], [3,5,6,9,10,12],[7,11,13,14], [15]] # layer indices
-cell_layers = [[1], [2,3,5,9], [4,6,7,10,11,13],[8,12,14,15], [16]] # cell number indices
+layers = [[0], [1, 2, 4, 8], [3, 5, 6, 9, 10, 12], [7, 11, 13, 14], [15]] # layer indices
+cell_layers = [[1], [2, 3, 5, 9], [4, 6, 7, 10, 11, 13], [8, 12, 14, 15], [16]] # cell number indices
 
 edges_layers = [[1, 2, 4, 8], [3, 5, 6, 9, 10, 12], [7, 11, 13, 14], [15]] # indices of edges in layer i
-ring_radius = np.array([5.23/20, 5.4/20, 5.3/20, 4.0/20]) # in ell_0 units
+ring_radius = np.array([5.23 / 20, 5.4 / 20, 5.3 / 20, 4.0 / 20]) # in ell_0 units
 
 def createW(E, rings): # function to create the weighted graph laplacian from ring canal sizes
     weight_vec = np.zeros(30)
@@ -90,14 +86,11 @@ def createW(E, rings): # function to create the weighted graph laplacian from ri
 class Simulation(object):  # main simulation object
 
     def __init__(self, T, Voocyte, n, rho):
-        self.T = W
+        self.T = T  # dynamical matrix
         self.N = 16
 
-        self.gamma = gamma
         self.n = n  # exponent in finite-size correction to Young-Laplace's law
         self.rho = rho  # max pressure radius
-
-        self.G = G
 
         self.layers = [[0], [1, 2, 4, 8], [3, 5, 6, 9, 10, 12], [7, 11, 13, 14], [15]]
         # initialize volumes
@@ -116,9 +109,7 @@ class Simulation(object):  # main simulation object
         self.r0n = self.r0**(self.n)
 
         # weigths for comparison to experiments (g_d in methods)
-        self.volumes_weights = np.array(
-                [(len(self.layers[i])) / 15 for i in range(1, 5)]
-                )
+        self.volumes_weights = np.array([(len(self.layers[i])) / 15 for i in range(1, 5)])
 
     def run(self):  # Solving for the dynamical evolution
 
@@ -211,9 +202,9 @@ def savesim(rings, rho, filename):
         A, t = st.normalize_layers()
         dfa = np.vstack((t, A))  # Averages over layers
         dfb = np.vstack((st.res.t, st.res.y))  # all cells volumes
-        np.savetxt(filename+"layers.csv", dfa, delimiter=",")
-        np.savetxt(filename+"cells.csv", dfb, delimiter=",")
-        print("Saved "+filename+".csv")
+        np.savetxt(filename + "layers.csv", dfa, delimiter=",")
+        np.savetxt(filename + "cells.csv", dfb, delimiter=",")
+        print("Saved " + filename + ".csv")
 
 if __name__ == "__main__":
 
@@ -253,11 +244,11 @@ if __name__ == "__main__":
     cropped_data = []
     plt.figure("Experimental data, NaNs removed")
     for i in range(len(dataset)):
-        time_indices = np.where(np.logical_not(np.isnan(dataset[i][0][:]))*np.logical_not(np.isnan(dataset[i][1][:])) )
+        time_indices = np.where(np.logical_not(np.isnan(dataset[i][0][:])) * np.logical_not(np.isnan(dataset[i][1][:])) )
         plt.plot(dataset[i][0][time_indices], dataset[i][1][time_indices])
         cropped_data.append((dataset[i][0][time_indices], dataset[i][1][time_indices]))
     plt.show()
- 
+
     def simrings(rings, rho, n, data):
         Ws = createW(E, rings)
         st = Simulation(Ws, 100, n, rho)
@@ -311,7 +302,7 @@ if __name__ == "__main__":
                  color=colors[i], linestyle='--')
 
 
-    ## Grid error plots plotting 
+    ## Grid error plots plotting - Mean projection
 
     plt.figure("Err 1,2")
     #plt.imshow(Err[:,:,c,d,e].T, extent=[r1_range[0], r1_range[-1], r2_range[0], r2_range[-1]], aspect="auto")
