@@ -195,6 +195,7 @@ class DataComp(object):  # Class to handle the error grids and comparison to exp
                     print(str(count / n * 100) + "% progress")
         return self.Error, argmin
 
+
 def savesim(rings, rho, filename):
         Ws = createW(E, rings)
         st = Simulation(Ws, 100, 6, rho)
@@ -206,8 +207,10 @@ def savesim(rings, rho, filename):
         np.savetxt(filename + "cells.csv", dfb, delimiter=",")
         print("Saved " + filename + ".csv")
 
+
 if __name__ == "__main__":
 
+    W = createW(E, ring_radius)
     sim = Simulation(W, 100, 6, .5)
     res = sim.run()
     plt.figure("Example run, volumes")
@@ -244,7 +247,7 @@ if __name__ == "__main__":
     cropped_data = []
     plt.figure("Experimental data, NaNs removed")
     for i in range(len(dataset)):
-        time_indices = np.where(np.logical_not(np.isnan(dataset[i][0][:])) * np.logical_not(np.isnan(dataset[i][1][:])) )
+        time_indices = np.where(np.logical_not(np.isnan(dataset[i][0][:])) * np.logical_not(np.isnan(dataset[i][1][:])))
         plt.plot(dataset[i][0][time_indices], dataset[i][1][time_indices])
         cropped_data.append((dataset[i][0][time_indices], dataset[i][1][time_indices]))
     plt.show()
@@ -254,10 +257,10 @@ if __name__ == "__main__":
         st = Simulation(Ws, 100, n, rho)
         st.run()
         plt.figure("plot rings")
-        A, t = st.normalize_layers() 
+        A, t = st.normalize_layers()
         colors = ['blue', 'red', 'green', 'gold']
-        for i in range(1,A.shape[0]):
-            plt.plot(t*exp_time, A[i,:].T, color=colors[i-1])
+        for i in range(1, A.shape[0]):
+            plt.plot(t * exp_time, A[i, :].T, color=colors[i - 1])
         plt.legend(["Layer 1", "Layer 2", "Layer 3", "Layer 4"])
         for i in range(len(data)):
             plt.plot(data[i][0] * exp_time, data[i][1],
@@ -306,13 +309,13 @@ if __name__ == "__main__":
 
     plt.figure("Err 1,2")
     #plt.imshow(Err[:,:,c,d,e].T, extent=[r1_range[0], r1_range[-1], r2_range[0], r2_range[-1]], aspect="auto")
-    plt.imshow(np.mean(Err, axis=(2,3,4)).T, extent=[r1_range[0], r1_range[-1], r2_range[0], r2_range[-1]], aspect="auto")
+    plt.imshow(np.mean(Err, axis=(2, 3, 4)).T, extent=[r1_range[0], r1_range[-1], r2_range[0], r2_range[-1]], aspect="auto")
     #plt.contourf(r1_range, r2_range, Err[:,:,c,d,e].T, cmap='gray')
     plt.xlabel("$r_1$")
     plt.ylabel("$r_2$")
     plt.colorbar()
     plt.figure("Err 2,3")
-    plt.imshow(np.mean(Err, axis=(0,3,4)).T, extent=[r2_range[0], r2_range[-1], r3_range[0], r3_range[-1]], aspect="auto")
+    plt.imshow(np.mean(Err, axis=(0, 3, 4)).T, extent=[r2_range[0], r2_range[-1], r3_range[0], r3_range[-1]], aspect="auto")
     plt.xlabel("$r_2$")
     plt.ylabel("$r_3$")
     plt.colorbar()
@@ -322,7 +325,7 @@ if __name__ == "__main__":
     plt.ylabel("$r_4$")
     plt.colorbar()
     plt.figure("Err 1,4")
-    plt.imshow(np.mean(Err, axis=(1,2,4)).T, extent=[r1_range[0], r1_range[-1], r4_range[0], r4_range[-1]], aspect="auto")
+    plt.imshow(np.mean(Err, axis=(1, 2, 4)).T, extent=[r1_range[0], r1_range[-1], r4_range[0], r4_range[-1]], aspect="auto")
     plt.xlabel("$r_1$")
     plt.ylabel("$r_4$")
     plt.colorbar()
