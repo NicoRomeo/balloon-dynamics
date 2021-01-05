@@ -105,7 +105,7 @@ class Simulation(object):  # main simulation object
         self.volumes_initial = self.volumes.copy()
 
         # Setting up the vlue of the max-pressure radius
-        self.r0 = self.rho * self.volumes**(2 / 3) / (self.n + 1)**(2 / self.n)
+        self.r0 = self.rho * self.volumes**(2 / 3) / (self.n + 1)**(1 / self.n)
         self.r0n = self.r0**(self.n)
 
         # weigths for comparison to experiments (g_d in methods)
